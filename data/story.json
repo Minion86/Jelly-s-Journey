@@ -1,0 +1,127 @@
+{
+  "prologue": [
+    {
+      "kicker": "BEFORE THE JOURNEY",
+      "title": "The safest place in the world",
+      "text": "Jelly's world was small and perfect: two favorite humans, a sunny home in Orlando, a pink bow for special days, and a place between them on every sofa. She knew the sound of their footsteps and could find either of them with her eyes closed.",
+      "color": "#193151"
+    },
+    {
+      "kicker": "THE FAMILY SCRAPBOOK TRIP",
+      "title": "Four stops, one family",
+      "text": "For their biggest trip yet, the three of them packed a camera, Jelly's blanket, and a paper itinerary: New York, Los Angeles, Louisiana, then home to Florida. At every stop her humans stamped the itinerary and tied a tiny ribbon to Jelly's travel bag.",
+      "color": "#41325f"
+    },
+    {
+      "kicker": "NEW YORK · 7:42 AM",
+      "title": "The squirrel with the blue ribbon",
+      "text": "On a windy morning near Central Park, a squirrel darted past with one of Jelly's blue luggage ribbons. Jelly slipped free for only a second to retrieve it. Then a parade rounded the corner, umbrellas filled the sidewalk, and the whole city became a moving wall.",
+      "color": "#274c68"
+    },
+    {
+      "kicker": "NEW YORK · 7:44 AM",
+      "title": "Gone from sight",
+      "text": "Jelly barked. Her humans called her name from the other side of the crowd. A taxi horn, a gust of newspaper, and a closing park gate swallowed every familiar sound. When the street cleared, Jelly was alone—but the ribbon was safe beneath her paw.",
+      "color": "#17213d"
+    },
+    {
+      "kicker": "THE SEARCH BEGINS",
+      "title": "They never stopped looking",
+      "text": "Her humans searched every block, shelter, station, and park. Forced to keep moving when a family emergency pulled them west, they left pink-ribbon notices and voice messages at every animal clinic along their route: JELLY, FOLLOW US HOME.",
+      "color": "#512747"
+    },
+    {
+      "kicker": "JELLY'S PROMISE",
+      "title": "A nose remembers love",
+      "text": "Inside the rescued ribbon, Jelly found the torn corner of the family itinerary. It smelled like her blanket, coffee, and both of her humans. She pressed her nose to the trail and made a promise: no city, storm, river, or cheeky squirrel would keep her from them.",
+      "color": "#24425b"
+    },
+    {
+      "kicker": "NY  →  LA  →  LOUISIANA  →  FLORIDA",
+      "title": "The long way home",
+      "text": "Helpful animals would point the way. Golden acorns would mark secret paths. Each stamped clue would carry Jelly closer to the house where two porch lights were still burning for her.",
+      "color": "#6a304f"
+    }
+  ],
+  "chapters": [
+    {
+      "title": "The Big Apple Begins",
+      "text": "The blue ribbon carries the scent of morning coffee and a yellow taxi. Jelly follows it over busy rooftops, through Central Park, and onto the Brooklyn Bridge while newspaper pigeons test whether she is brave enough for the road ahead.",
+      "objective": "Find the luggage tag at the far side of Brooklyn Bridge."
+    },
+    {
+      "title": "The Coast of Moving Pictures",
+      "text": "A night mail train brings Jelly to Los Angeles. Roller-skating raccoons turn the boardwalk into a race, studio lights reveal hidden routes, and the Pacific wind carries a familiar voice from an old recording.",
+      "objective": "Follow the film-strip clues from Venice to Sunset Pier."
+    },
+    {
+      "title": "A Song Through the Bayou",
+      "text": "The trail bends toward Louisiana, where trumpet frogs speak in musical gusts. Fireflies illuminate safe landings and a riverboat captain remembers two worried travelers carrying Jelly's photograph.",
+      "objective": "Ride the rhythm of New Orleans and recover the final route stamp."
+    },
+    {
+      "title": "Every Road Leads Home",
+      "text": "Orange blossom, warm rain, and lake water—Jelly knows these scents. The Orlando lizards challenge her to use everything she learned, while every squirrel friend runs ahead to tell the neighborhood she is coming home.",
+      "objective": "Cross Lake Eola and follow the porch lights home."
+    }
+  ],
+  "level_endings": {
+    "ny-taxi": {
+      "kicker": "CLUE ONE · A COFFEE-SCENTED RECEIPT",
+      "title": "Grand Central Corner",
+      "text": "Beneath a taxi seat, Jelly finds a receipt touched by one of her humans that morning. On the back: 'Central Park information booth.' The pigeon with the paper hat points north."
+    },
+    "ny-park": {
+      "kicker": "CLUE TWO · A PINK THREAD",
+      "title": "The notice at Bow Bridge",
+      "text": "A pink thread from a missing-dog notice flutters near the bridge. Her humans were here. The ink has run in the fountain spray, but one word remains clear: BROOKLYN."
+    },
+    "ny-bridge": {
+      "kicker": "NEW YORK STAMP RECOVERED",
+      "title": "A ticket pointing west",
+      "text": "At the bridge lookout, Jelly uncovers the family's luggage tag and an express-mail ticket to Los Angeles. A kind conductor opens the Moonlight Mail car. The trail crosses the country."
+    },
+    "la-boardwalk": {
+      "kicker": "CLUE FOUR · FAMILIAR FOOTSTEPS",
+      "title": "Tracks beside the boardwalk",
+      "text": "The roller raccoons stop showing off long enough to reveal two sets of footprints beside a missing-dog poster. They lead toward a studio shuttle covered in silver stars."
+    },
+    "la-studio": {
+      "kicker": "CLUE FIVE · A RECORDED VOICE",
+      "title": "Soundstage Seven",
+      "text": "A studio microphone still holds a short recording: 'Jelly, we love you. Follow the pink ribbons.' Jelly's ears rise before the first word is finished. The next ribbon waits at Sunset Pier."
+    },
+    "la-sunset": {
+      "kicker": "LOS ANGELES STAMP RECOVERED",
+      "title": "The postcard in the sunset",
+      "text": "A postcard tucked inside the pier telescope carries both humans' handwriting and the address of a Louisiana animal clinic. The Pacific looks enormous—but Jelly's courage is bigger."
+    },
+    "la-jazz": {
+      "kicker": "CLUE SEVEN · A SONG SHE KNOWS",
+      "title": "Preservation Corner",
+      "text": "The trumpet frogs play the little tune Jelly's humans whistle at dinner. A musician remembers them asking every shopkeeper about a dog with a pink bow. He points toward Firefly Bend."
+    },
+    "la-bayou": {
+      "kicker": "CLUE EIGHT · FIREFLY CODE",
+      "title": "The lights spell HOME",
+      "text": "The fireflies gather over the safest logs, then blink four letters in the dark. At the final light hangs Jelly's old collar tag, repaired and polished by the bayou clinic."
+    },
+    "la-riverboat": {
+      "kicker": "LOUISIANA STAMP RECOVERED",
+      "title": "A captain's promise",
+      "text": "The riverboat captain gives Jelly a voice message from her humans and a ride downstream: 'We are going home to Orlando. The porch lights will stay on every night.'"
+    },
+    "or-grove": {
+      "kicker": "CLUE TEN · ORANGE BLOSSOM",
+      "title": "A scent from her own backyard",
+      "text": "Every breeze smells more familiar. An orange crate bears the logo of the market beside Jelly's neighborhood. The lizards cheer as she races toward Lake Eola."
+    },
+    "or-lake": {
+      "kicker": "CLUE ELEVEN · TWO SHADOWS WAITING",
+      "title": "Across Lake Eola",
+      "text": "From the swan boat roof, Jelly sees two silhouettes adding another poster to the community board. She barks—but thunder carries the sound away. One final road remains."
+    }
+  },
+  "epilogue": "The front gate opens before Jelly reaches it. Her two humans drop every poster and run. For a long moment there are no cities, no clues, and no miles—only Jelly in the safest place in the world, held between them. The animal friends arrive one by one, and the scrapbook gains a final page: FAMILY IS THE TRAIL THAT ALWAYS LEADS HOME."
+}
+

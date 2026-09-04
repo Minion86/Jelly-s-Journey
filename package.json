@@ -1,7 +1,14 @@
 {
-  "name":"jellys-journey-home",
-  "version":"3.0.0",
-  "private":true,
-  "type":"module",
-  "scripts":{"build":"node tools/build.mjs","dev":"node tools/server.mjs","test":"node tools/validate.mjs"}
+  "name": "jellys-journey-home",
+  "version": "4.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data": "node tools/export-godot-data.mjs",
+    "audio": "python3 tools/generate_audio.py",
+    "build": "node tools/build-godot.mjs",
+    "build:legacy": "node tools/build.mjs",
+    "dev:legacy": "node tools/server.mjs",
+    "test": "node tools/validate-godot.mjs"
+  }
 }

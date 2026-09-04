@@ -1,0 +1,46 @@
+; Jelly's Journey Home — Godot 4.3
+; The project is intentionally renderer-light so the same build runs on desktop,
+; mobile browsers, and the GitHub Pages release.
+config_version=5
+
+[application]
+
+config/name="Jelly's Journey Home"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://assets/jelly-icon.png"
+
+[autoload]
+
+GameState="*res://scripts/GameState.gd"
+AudioDirector="*res://scripts/AudioDirector.gd"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=540
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/handheld/orientation=1
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/canvas_textures/default_texture_filter=1
+environment/defaults/default_clear_color=Color(0.055, 0.086, 0.157, 1)
+
+[audio]
+
+driver/enable_input=false
+default_bus_layout="res://default_bus_layout.tres"
+
+[layer_names]
+
+2d_physics/layer_1="World"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemy"
+2d_physics/layer_4="Trigger"
+

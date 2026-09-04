@@ -1,4 +1,4 @@
-name: Deploy Jelly's Journey
+name: Build and deploy Jelly's Journey — Godot 4
 
 on:
   push:
@@ -15,18 +15,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-and-deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Build and validate game
-        run: npm run build && npm test
+      - name: Import project assets
+        run: godot --headless --path . --editor --quit
+      - name: Build Godot web release
+        run: |
+          rm -rf dist
+          mkdir -p dist
+          godot --headless --path . --export-release "Web" dist/index.html
+      - name: Verify exported game
+        run: |
+          test -s dist/index.html
+          test -s dist/index.wasm
+          test -s dist/index.pck
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
