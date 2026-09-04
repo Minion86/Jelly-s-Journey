@@ -52,7 +52,7 @@ dist/
   game-v2.js            Canvas renderer, physics, enemy AI, input, audio, and progression
   manifest.webmanifest  Installable app metadata
   sw.js                 Offline cache
-  assets/               Original generated sprites and supplied family image
+  assets/               Included in the downloadable source bundle; the GitHub build loads the hosted originals
 tools/
   server.mjs            Zero-dependency local development server
   validate.mjs          Syntax and asset-reference validation

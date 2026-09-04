@@ -1,0 +1,11 @@
+{
+  "name":"Jelly's Journey Home",
+  "short_name":"Jelly's Journey",
+  "description":"A cheerful coast-to-coast platform adventure for kids.",
+  "start_url":"./",
+  "display":"standalone",
+  "orientation":"landscape-primary",
+  "background_color":"#173157",
+  "theme_color":"#ef4b8f",
+  "icons":[{"src":"https://jellys-journey-home.nelsonmartinez86.chatgpt.site/assets/jelly-icon.png","sizes":"1254x1254","type":"image/png","purpose":"any maskable"}]
+}
