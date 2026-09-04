@@ -73,3 +73,82 @@ window.JELLY_LEVELS = [
     treats:[[680,350],[1020,265],[1720,240],[2420,215],[3120,245]], enemies:[[680,0,'dash'],[1360,0,'climb'],[2070,0,'dash'],[2770,0,'climb'],[3475,0,'dash']], goal:[3910,315]
   }
 ];
+
+/* V3 adventure layers: every stage has a distinct checkpoint, environmental
+   rhythm, decorative prop set, and a hand-authored squirrel chase route. */
+const JELLY_V3_DETAILS = {
+  'ny-taxi': {
+    checkpoint:[1850,'Grand Central Corner'], weather:'city-breeze',
+    hazards:[['steam',1170,380,54,0],['slick',2160,420,130,0],['steam',2635,365,54,1.7]],
+    props:[['hydrant',365,441,1],['newsstand',920,330,1],['lamp',1515,350,1],['hotdog',2300,365,1],['taxi-sign',2920,380,1]],
+    squirrelPath:[[690,368],[1015,318],[1370,377],[1800,287],[2105,357]]
+  },
+  'ny-park': {
+    checkpoint:[1900,'Bow Bridge'], weather:'leaf-fall',
+    hazards:[['fountain',930,360,70,0],['slick',1210,430,120,0],['leaf-gust',2320,250,330,160,1]],
+    props:[['bench',260,418,1],['park-lamp',780,310,1],['fountain-statue',1330,336,1],['picnic',2050,392,1],['bridge-arch',2860,300,1]],
+    squirrelPath:[[565,360],[870,302],[1160,370],[1575,330],[1880,385],[2265,295]]
+  },
+  'ny-bridge': {
+    checkpoint:[1945,'East Tower'], weather:'river-gusts',
+    hazards:[['leaf-gust',780,245,360,175,-1],['leaf-gust',2290,220,420,190,1],['steam',3470,420,48,.8]],
+    props:[['bridge-flag',430,300,1],['cable-lamp',1210,345,1],['ferry',1810,400,.9],['bridge-flag',2860,250,1],['skyline-sign',3420,360,1]],
+    squirrelPath:[[610,362],[965,290],[1280,360],[1630,270],[1950,348]]
+  },
+  'la-boardwalk': {
+    checkpoint:[1765,'Venice Skate Plaza'], weather:'ocean-sparkle',
+    hazards:[['skate-ramp',1045,445,92,0],['leaf-gust',1850,260,300,155,1],['skate-ramp',2920,370,90,0]],
+    props:[['surf-rack',390,410,1],['mural',900,285,1],['lifeguard',1570,310,1],['palm-sign',2380,350,1],['snack-cart',3190,375,1]],
+    squirrelPath:[[620,360],[1025,383],[1355,305],[1725,370],[2080,290]]
+  },
+  'la-studio': {
+    checkpoint:[1905,'Soundstage 7'], weather:'studio-glitter',
+    hazards:[['spotlight',860,205,180,250,0],['skate-ramp',1640,350,90,0],['spotlight',2580,190,210,260,1.5]],
+    props:[['camera',300,420,1],['clapper',940,255,1],['director-chair',1340,370,1],['movie-sign',2300,250,1],['camera',3260,370,1]],
+    squirrelPath:[[535,330],[855,250],[1190,360],[1595,290],[1910,370]]
+  },
+  'la-sunset': {
+    checkpoint:[1970,'Sunset Pier'], weather:'sunset-sparkle',
+    hazards:[['wave',660,430,88,0],['wave',2025,425,92,1.8],['leaf-gust',2850,220,330,180,-1]],
+    props:[['umbrella',250,410,1],['surf-rack',980,320,1],['ferris-kiosk',1650,300,1],['arcade',2460,285,1],['lifeguard',3450,365,1]],
+    squirrelPath:[[600,370],[945,310],[1265,380],[1630,295],[1970,365]]
+  },
+  'la-jazz': {
+    checkpoint:[1710,'Preservation Corner'], weather:'music-notes',
+    hazards:[['brass-gust',1050,230,270,175,1],['slick',2070,445,120,0],['brass-gust',2780,240,290,170,-1]],
+    props:[['balcony',430,300,1],['jazz-lamp',990,300,1],['bead-stand',1520,370,1],['balcony',2370,285,1],['street-band',3150,310,1]],
+    squirrelPath:[[625,350],[985,290],[1320,370],[1710,310],[2030,385]]
+  },
+  'la-bayou': {
+    checkpoint:[1950,'Firefly Bend'], weather:'fireflies',
+    hazards:[['bubble',955,340,68,0],['moss-gust',1740,215,280,190,1],['bubble',3000,330,68,2]],
+    props:[['canoe',320,420,1],['cypress-knee',915,300,1],['lantern',1585,260,1],['alligator-sign',2400,250,1],['canoe',3350,365,1]],
+    squirrelPath:[[575,360],[915,280],[1245,370],[1590,260],[1950,350]]
+  },
+  'la-riverboat': {
+    checkpoint:[2010,'Paddlewheel Deck'], weather:'river-lights',
+    hazards:[['brass-gust',980,210,260,170,1],['wave',2020,400,90,.6],['brass-gust',3050,210,280,180,-1]],
+    props:[['rope-post',340,420,1],['paddlewheel',950,250,1],['street-band',1710,245,1],['lifebuoy',2700,345,1],['river-sign',3490,350,1]],
+    squirrelPath:[[615,350],[955,270],[1295,360],[1655,245],[2010,340]]
+  },
+  'or-grove': {
+    checkpoint:[1710,'Orange Blossom Gate'], weather:'blossom-drift',
+    hazards:[['orange-bounce',1070,360,72,0],['leaf-gust',1760,225,290,170,1],['orange-bounce',2820,410,72,1.5]],
+    props:[['orange-crate',330,415,1],['farm-sign',1000,305,1],['windmill',1510,270,.9],['orange-crate',2420,270,1],['grove-gate',3180,295,1]],
+    squirrelPath:[[605,365],[995,300],[1330,375],[1710,290],[2040,365],[2400,260]]
+  },
+  'or-lake': {
+    checkpoint:[1940,'Lake Eola Fountain'], weather:'warm-rain',
+    hazards:[['fountain',960,340,72,0],['wave',1940,410,90,1],['fountain',3020,320,72,2]],
+    props:[['swan-boat',290,400,1],['lake-lamp',910,285,1],['fountain-statue',1660,255,1],['swan-boat',2630,345,1],['picnic',3390,370,1]],
+    squirrelPath:[[565,360],[905,280],[1245,370],[1585,255],[1940,350],[2285,230]]
+  },
+  'or-home': {
+    checkpoint:[2340,'Welcome Home Way'], weather:'celebration',
+    hazards:[['sprinkler',960,325,72,0],['leaf-gust',2020,210,300,180,1],['sprinkler',3400,400,72,2]],
+    props:[['mailbox',300,418,1],['welcome-sign',1280,365,1],['family-poster',1980,345,1],['mailbox',3050,252,1],['home-banner',3730,350,1]],
+    squirrelPath:[[605,350],[945,265],[1285,360],[1635,240],[1985,340],[2340,215],[2690,330]]
+  }
+};
+
+window.JELLY_LEVELS.forEach(level => Object.assign(level, JELLY_V3_DETAILS[level.id]));

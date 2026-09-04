@@ -1,6 +1,6 @@
 # Jelly's Journey Home
 
-An original, installable 2D platform adventure for children. Help Jelly follow her family's trail across New York, Los Angeles, Louisiana, and Orlando.
+An original, installable 2D platform adventure for children. Help Jelly follow her family's trail across New York, Los Angeles, Louisiana, and Orlando—complete with playful squirrel chases, responsive enemies, checkpoints, and lively city set pieces.
 
 ## Play and install
 
@@ -27,11 +27,13 @@ Then open `http://localhost:8080`.
 
 - 4 story chapters and 12 hand-authored levels
 - 5 optional treats in every level
-- Animated city-specific enemies with patrol, swoop, dash, trumpet, hop, and climb behavior
+- A unique squirrel chase in every level: catch up gently to earn a golden acorn and make a new friend
+- Animated city-specific enemies with anticipation, patrol, swoop, dash, trumpet, hop, climb, recovery, stun, motion trails, squash-and-stretch, and readable warning behavior
 - Moving platforms with level-specific identities: taxis, park leaves, bridge signs, boards, movie slates, surfboards, jazz stages, bayou logs, riverboat decks, orange crates, swan boats, and memory platforms
+- Hand-placed landmarks, props, foreground foliage, weather, environmental particles, checkpoint signs, wind zones, puddles, fountains, waves, ramps, sprinklers, and orange bounce pads
 - Three courage hearts and child-friendly retry behavior
 - Saved local progress, chapter selection, offline caching, keyboard controls, and touchscreen controls
-- Web Audio sound effects with no external audio dependency
+- A coordinated Web Audio score with four city themes and key-matched cues for jumps, landings, barks, pickups, checkpoints, enemies, squirrel chases, and victories
 
 ## Level guide
 
@@ -52,7 +54,7 @@ dist/
   game-v2.js            Canvas renderer, physics, enemy AI, input, audio, and progression
   manifest.webmanifest  Installable app metadata
   sw.js                 Offline cache
-  assets/               Included in the downloadable source bundle; the GitHub build loads the hosted originals
+  assets/               Original generated sprites and supplied family image
 tools/
   server.mjs            Zero-dependency local development server
   validate.mjs          Syntax and asset-reference validation
@@ -65,3 +67,5 @@ npm test
 ```
 
 All artwork is original to this project and was created from the supplied references of Jelly and her family.
+
+> **GitHub mirror:** The generated PNG artwork is served from the [live game](https://jellys-journey-home.nelsonmartinez86.chatgpt.site) so the repository stays lightweight. The gameplay source is complete and can be run locally with an internet connection.

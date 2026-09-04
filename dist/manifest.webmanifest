@@ -1,7 +1,7 @@
 {
   "name":"Jelly's Journey Home",
   "short_name":"Jelly's Journey",
-  "description":"A cheerful coast-to-coast platform adventure for kids.",
+  "description":"A detailed coast-to-coast platform adventure with squirrel chases, animated city friends, and musical levels.",
   "start_url":"./",
   "display":"standalone",
   "orientation":"landscape-primary",
