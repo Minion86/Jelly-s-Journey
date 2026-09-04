@@ -1,4 +1,4 @@
-name: Build and deploy Jelly's Journey — Godot 4
+name: Build Jelly's Journey — Godot 4
 
 on:
   push:
@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -18,10 +16,7 @@ env:
   GODOT_VERSION: "4.3"
 
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:4.3
@@ -47,10 +42,8 @@ jobs:
           test -s dist/index.wasm.part2
           test ! -e dist/index.wasm
           test -s dist/index.pck
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload tested web build
+        uses: actions/upload-artifact@v4
         with:
+          name: jellys-journey-web
           path: dist
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
