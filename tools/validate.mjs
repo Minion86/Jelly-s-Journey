@@ -16,6 +16,6 @@ const game=await readFile(join(root,'game-v2.js'),'utf8');
 for(const feature of ['updateSquirrels','updateHazards','drawCheckpoint','startMusic','squirrel-sprites.png']){
   if(!game.includes(feature))throw new Error(`Missing V3 feature: ${feature}`);
 }
-const squirrel=await readFile(join(root,'assets/squirrel-sprites.png')).catch(()=>null);
-if(squirrel&&(squirrel.readUInt32BE(16)!==1776||squirrel.readUInt32BE(20)!==888))throw new Error('Squirrel sheet must be a 4 × 2 grid at 1776 × 888');
+const squirrel=await readFile(join(root,'assets/squirrel-sprites.png'));
+if(squirrel.readUInt32BE(16)!==1776||squirrel.readUInt32BE(20)!==888)throw new Error('Squirrel sheet must be a 4 × 2 grid at 1776 × 888');
 console.log(`Validated 12 detailed levels, squirrel chases, dynamic hazards, coherent audio, and ${refs.length} local entry-point assets.`);

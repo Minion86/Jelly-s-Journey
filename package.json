@@ -3,5 +3,5 @@
   "version":"3.0.0",
   "private":true,
   "type":"module",
-  "scripts":{"dev":"node tools/server.mjs","test":"node tools/validate.mjs"}
+  "scripts":{"build":"node tools/build.mjs","dev":"node tools/server.mjs","test":"node tools/validate.mjs"}
 }
