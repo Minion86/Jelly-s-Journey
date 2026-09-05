@@ -1,4 +1,12 @@
 {
+  "intro_animation": [
+    "Together in Central Park",
+    "The playful squirrel",
+    "One heartbeat of chase",
+    "A river of umbrellas",
+    "Voices through the gate",
+    "The ribbon smelled like home"
+  ],
   "prologue": [
     {
       "kicker": "BEFORE THE JOURNEY",
@@ -122,6 +130,6 @@
       "text": "From the swan boat roof, Jelly sees two silhouettes adding another poster to the community board. She barks—but thunder carries the sound away. One final road remains."
     }
   },
-  "epilogue": "The front gate opens before Jelly reaches it. Her two humans drop every poster and run. For a long moment there are no cities, no clues, and no miles—only Jelly in the safest place in the world, held between them. The animal friends arrive one by one, and the scrapbook gains a final page: FAMILY IS THE TRAIL THAT ALWAYS LEADS HOME."
+  "epilogue": "The front gate opens before Jelly reaches it. Her two humans drop every poster and run. For a long moment there are no cities, no clues, and no miles—only Jelly in the safest place in the world, held between them. The animal friends arrive one by one, and the scrapbook gains a final page: FAMILY IS THE TRAIL THAT ALWAYS LEADS HOME.",
+  "finale_message": "They held Jelly until every lonely mile felt like a distant dream. From that evening forward, wherever the three of them went, they went together—hugging, laughing, and loving each other forever and ever."
 }
-

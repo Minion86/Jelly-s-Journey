@@ -56,6 +56,40 @@ func play_level(level_id: String) -> void:
 	tween.tween_property(music, "volume_db", -8.0, 0.75)
 
 
+func play_finale() -> void:
+	current_track = "finale-home"
+	var path := "res://audio/music/finale-home.ogg"
+	if not ResourceLoader.exists(path):
+		stop_music(0.5)
+		return
+	var finale_stream = load(path)
+	if finale_stream is AudioStreamOggVorbis:
+		finale_stream.loop = true
+	var tween := create_tween()
+	tween.tween_property(music, "volume_db", -38.0, 0.28)
+	tween.tween_callback(func():
+		music.stream = finale_stream
+		music.play()
+	)
+	tween.tween_property(music, "volume_db", -7.0, 1.8).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+func play_intro() -> void:
+	current_track = "intro-central-park"
+	var path := "res://audio/music/intro-central-park.ogg"
+	if not ResourceLoader.exists(path):
+		stop_music(0.5)
+		return
+	var intro_stream = load(path)
+	var tween := create_tween()
+	tween.tween_property(music, "volume_db", -42.0, 0.2)
+	tween.tween_callback(func():
+		music.stream = intro_stream
+		music.play()
+	)
+	tween.tween_property(music, "volume_db", -7.0, 1.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
 func stop_music(fade := 0.6) -> void:
 	var tween := create_tween()
 	tween.tween_property(music, "volume_db", -80.0, fade)
@@ -91,4 +125,3 @@ func _available_player() -> AudioStreamPlayer:
 		if not player.playing:
 			return player
 	return sfx_pool[0]
-

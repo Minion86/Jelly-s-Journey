@@ -1,6 +1,6 @@
 extends Node2D
 
-enum Mode { TITLE, PROLOGUE, CHAPTER, PLAYING, PAUSED, MAP, LEVEL_END, FINALE }
+enum Mode { TITLE, INTRO, PROLOGUE, CHAPTER, PLAYING, PAUSED, MAP, LEVEL_END, FINALE }
 
 const WORLD_NAMES := ["NEW YORK", "LOS ANGELES", "LOUISIANA", "ORLANDO"]
 const WORLD_COLORS := [
@@ -53,6 +53,8 @@ var collect_label := Label.new()
 var toast_label := Label.new()
 var touch_controls := Control.new()
 var toast_tween: Tween
+var intro_sequence: JellyIntroSequence
+var finale_sequence: JellyFinaleSequence
 
 
 func _ready() -> void:
@@ -61,7 +63,11 @@ func _ready() -> void:
 	_load_content()
 	_build_ui()
 	show_title()
-	if OS.get_cmdline_user_args().has("--smoke-level"):
+	if OS.get_cmdline_user_args().has("--smoke-intro"):
+		call_deferred("show_intro")
+	elif OS.get_cmdline_user_args().has("--smoke-finale"):
+		call_deferred("show_finale")
+	elif OS.get_cmdline_user_args().has("--smoke-level"):
 		call_deferred("load_level", 0)
 	queue_redraw()
 
@@ -85,7 +91,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_show_pause_card()
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("ui_accept"):
-		if mode in [Mode.TITLE, Mode.PROLOGUE, Mode.CHAPTER, Mode.LEVEL_END, Mode.FINALE]:
+		if mode in [Mode.TITLE, Mode.INTRO, Mode.PROLOGUE, Mode.CHAPTER, Mode.LEVEL_END, Mode.FINALE]:
 			_primary_action()
 
 
@@ -99,6 +105,8 @@ func _load_content() -> void:
 func show_title() -> void:
 	mode = Mode.TITLE
 	get_tree().paused = false
+	_clear_intro()
+	_clear_finale()
 	_clear_world()
 	AudioDirector.stop_music(0.35)
 	hud.hide()
@@ -120,8 +128,10 @@ func show_title() -> void:
 func _primary_action() -> void:
 	match mode:
 		Mode.TITLE:
-			prologue_index = 0
-			show_prologue_panel()
+			show_intro()
+		Mode.INTRO:
+			if is_instance_valid(intro_sequence):
+				intro_sequence.advance()
 		Mode.PROLOGUE:
 			prologue_index += 1
 			var panels: Array = story.get("prologue", [])
@@ -136,8 +146,8 @@ func _primary_action() -> void:
 		Mode.LEVEL_END:
 			_advance_after_level()
 		Mode.FINALE:
-			GameState.reset_journey()
-			show_title()
+			if is_instance_valid(finale_sequence):
+				finale_sequence.advance()
 
 
 func _secondary_action() -> void:
@@ -173,6 +183,29 @@ func show_prologue_panel() -> void:
 	_set_overlay_color(Color(panel.get("color", "#17213d")))
 
 
+func show_intro() -> void:
+	mode = Mode.INTRO
+	get_tree().paused = false
+	_clear_world()
+	_clear_intro()
+	_clear_finale()
+	AudioDirector.play_intro()
+	hud.hide()
+	touch_controls.hide()
+	overlay.hide()
+	map_buttons.hide()
+	intro_sequence = JellyIntroSequence.new()
+	intro_sequence.finished.connect(_on_intro_finished)
+	ui_layer.add_child(intro_sequence)
+	intro_sequence.play()
+
+
+func _on_intro_finished() -> void:
+	_clear_intro()
+	level_index = 0
+	show_chapter_intro(0)
+
+
 func show_chapter_intro(world_index: int) -> void:
 	mode = Mode.CHAPTER
 	var chapters: Array = story.get("chapters", [])
@@ -197,6 +230,8 @@ func load_level(index: int) -> void:
 	if levels.is_empty():
 		show_toast("Level data could not be loaded.")
 		return
+	_clear_intro()
+	_clear_finale()
 	_clear_world()
 	level_index = clampi(index, 0, levels.size() - 1)
 	current_level = levels[level_index]
@@ -408,22 +443,25 @@ func _advance_after_level() -> void:
 
 func show_finale() -> void:
 	mode = Mode.FINALE
-	get_tree().paused = true
-	AudioDirector.stop_music(0.7)
-	AudioDirector.play_sfx("win", 0.92, 0.0)
+	get_tree().paused = false
+	_clear_world()
+	_clear_finale()
+	AudioDirector.play_finale()
+	AudioDirector.play_sfx("win", 0.86, -3.0)
 	hud.hide()
 	touch_controls.hide()
-	overlay.show()
+	overlay.hide()
 	map_buttons.hide()
-	art.show()
-	art.texture = load("res://assets/family.jpeg")
-	kicker.text = "SHE FOLLOWED LOVE ALL THE WAY HOME"
-	title.text = "Jelly found her family!"
-	body.text = str(story.get("epilogue", "Every friend, every clue, and every brave little step led Jelly back to the two people who never stopped looking for her."))
-	prompt.text = "The journey ends at home — but the squirrel chases never do."
-	primary_button.text = "Play again  ↻"
-	secondary_button.hide()
-	_set_overlay_color(Color("#54234d"))
+	finale_sequence = JellyFinaleSequence.new()
+	finale_sequence.configure(str(story.get("finale_message", "No matter how far the road carried her, love brought Jelly home.")))
+	finale_sequence.replay_requested.connect(_on_finale_replay)
+	ui_layer.add_child(finale_sequence)
+	finale_sequence.play()
+
+
+func _on_finale_replay() -> void:
+	GameState.reset_journey()
+	show_title()
 
 
 func pause_game() -> void:
@@ -539,6 +577,18 @@ func _clear_world() -> void:
 	current_level = {}
 
 
+func _clear_intro() -> void:
+	if is_instance_valid(intro_sequence):
+		intro_sequence.queue_free()
+	intro_sequence = null
+
+
+func _clear_finale() -> void:
+	if is_instance_valid(finale_sequence):
+		finale_sequence.queue_free()
+	finale_sequence = null
+
+
 func _update_fx(delta: float) -> void:
 	for particle in particles:
 		particle.position += particle.velocity * delta
@@ -567,7 +617,7 @@ func _draw() -> void:
 	var width := level_width if not current_level.is_empty() else 1300.0
 	_draw_sky(world_index, width)
 	if not current_level.is_empty():
-		_draw_landmarks(world_index, width, str(current_level.get("scene", "")))
+		_draw_region_background(world_index, width, str(current_level.get("scene", "")))
 		_draw_atmosphere(str(current_level.get("weather", "")), width)
 		_draw_props(current_level.get("props", []))
 		_draw_secrets(current_level.get("secrets", []), WORLD_COLORS[world_index][2])
@@ -593,6 +643,27 @@ func _draw_sky(world_index: int, width: float) -> void:
 		draw_circle(Vector2(x, y), 21, cloud)
 		draw_circle(Vector2(x + 27, y - 9), 30, cloud)
 		draw_circle(Vector2(x + 58, y), 20, cloud)
+
+
+func _draw_region_background(world_index: int, width: float, scene: String) -> void:
+	var path := "res://assets/backgrounds/new-york-skyline-v1.webp"
+	match world_index:
+		0:
+			path = "res://assets/backgrounds/new-york-street-v1.webp" if scene == "taxi" else "res://assets/backgrounds/new-york-skyline-v1.webp"
+		1:
+			path = "res://assets/backgrounds/los-angeles-v1.webp"
+		2:
+			path = "res://assets/backgrounds/louisiana-quarter-v1.webp"
+		3:
+			path = "res://assets/backgrounds/orlando-v1.webp"
+	var texture: Texture2D = load(path)
+	if not texture:
+		_draw_landmarks(world_index, width, scene)
+		return
+	var segment_width := 960.0
+	for i in range(int(width / segment_width) + 2):
+		var tint := Color(1, 1, 1, 0.86 if i % 2 == 0 else 0.79)
+		draw_texture_rect(texture, Rect2(i * segment_width - 12.0, 0, segment_width + 24.0, 540), false, tint)
 
 
 func _draw_landmarks(world_index: int, width: float, scene: String) -> void:

@@ -23,9 +23,11 @@ The controller includes 130 ms coyote time, 150 ms jump buffering, variable jump
 
 ## Story and levels
 
-- A seven-panel prologue shows Jelly's life with her two humans, the family scrapbook trip, the windy New York morning when she becomes separated, her humans' search, and Jelly's promise to follow their scent home.
+- A six-shot animated Central Park prologue shows Jelly's joyful walk with her humans, the playful squirrel stealing her blue ribbon, the frantic chase, and the parade that separates the family. Camera drifts, crossfades, flying leaves, ribbon trails, timed sound effects, and an original score carry the scene directly into Chapter One.
 - Four chapter introductions and eleven post-level clue scenes carry the story into the reunion.
+- The ending is a six-stage animated reunion: Jelly's human parents recognize her, kneel, embrace her, lift her into their arms, and finally hold her together beneath the porch lights that never went dark.
 - Twelve hand-authored levels contain five scent treats, a staged squirrel chase, checkpoint, rhythmic environmental mechanics, animated enemy encounters, secret routes, and a unique exit clue.
+- Five new illustrated regional backdrops—two New York views plus Los Angeles, Louisiana, and Orlando—were developed from supplied travel-photo references and layered beneath weather and gameplay effects.
 
 | Chapter | Level 1 | Level 2 | Level 3 |
 | --- | --- | --- | --- |
@@ -49,7 +51,7 @@ Jelly's bark stuns aggressive animals rather than hurting them. Squirrels use a 
 
 ## Original soundtrack and effects
 
-Every level has its own original looping cue. The twelve tracks rearrange one new eight-note Jelly motif with different tempo, harmony, instrumentation, and rhythmic character for each place. The soundtrack reference informed the idea of thematic variation; no reference melody or recording is included.
+Every level has its own original looping cue. The twelve tracks rearrange one new eight-note Jelly motif with different tempo, harmony, instrumentation, and rhythmic character for each place. Separate original intro and finale arrangements bring the score to fourteen cues. The soundtrack reference informed the idea of thematic variation; no reference melody or recording is included.
 
 The effect library contains three randomized bark performances plus jump, landing, treat, checkpoint, hurt, squirrel, victory, and movement sounds. Music ducks briefly under important effects.
 
@@ -90,8 +92,8 @@ scenes/main.tscn          Main game scene
 scripts/                  Player, enemy, squirrel, world, UI, audio, and save logic
 data/levels.json          Twelve level layouts and secret routes
 data/story.json           Prologue, chapters, level clues, and epilogue
-assets/                   Jelly, family, enemy, and squirrel sprite sheets
-audio/music/              Twelve original level loops
+assets/                   Characters, cinematic sheets, and regional backgrounds
+audio/music/              Twelve level loops plus intro and finale scores
 audio/sfx/                Bark variants and gameplay effect library
 docs/                     Design and architecture notes
 tools/                    Data/audio generation, validation, and export helpers

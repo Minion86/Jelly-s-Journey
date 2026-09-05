@@ -192,6 +192,70 @@ def compose_track(level_id: str, bpm: int, key: int, lead: str, feel: str, progr
     return np.tanh(mix / peak * 1.22) * 0.82
 
 
+def compose_finale() -> np.ndarray:
+    """A gentle homecoming variation of Jelly's original eight-note motif."""
+    bpm = 76
+    beat = 60.0 / bpm
+    bars = 8
+    duration = bars * 4 * beat
+    mix = np.zeros((int(duration * SR), 2), dtype=np.float64)
+    progression = [0, 3, 4, 0, 5, 3, 4, 0]
+    key = 60
+    for bar in range(bars):
+        root = key + MAJOR[progression[bar]]
+        bar_start = bar * 4 * beat
+        for voice, note in enumerate([root - 12, root - 5, root, root + 4, root + 7]):
+            add_note(mix, bar_start, 3.8 * beat, note, 0.033 if voice < 2 else 0.025, "reed", -0.55 + voice * 0.27, 0.35, 0.65)
+        for step, interval in enumerate(JELLY_MOTIF):
+            when = bar_start + step * 0.5 * beat
+            octave = 12 if bar >= 6 and step >= 4 else 0
+            add_note(mix, when, 0.72 * beat, key + interval + octave, 0.085, "bell", 0.18, 0.025, 0.34)
+        for pulse in [0.0, 2.0]:
+            add_note(mix, bar_start + pulse * beat, 1.5 * beat, root - 24, 0.065, "triangle", -0.22, 0.08, 0.5)
+    fade = int(1.15 * SR)
+    mix[:fade] *= np.linspace(0, 1, fade)[:, None]
+    mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
+    peak = max(1.0, np.max(np.abs(mix)) / 0.9)
+    return np.tanh(mix / peak * 1.15) * 0.78
+
+
+def compose_intro() -> np.ndarray:
+    """Warm family waltz, breathless chase, then a quiet statement of Jelly's motif."""
+    bpm = 92
+    beat = 60.0 / bpm
+    bars = 12
+    duration = bars * 4 * beat
+    mix = np.zeros((int(duration * SR), 2), dtype=np.float64)
+    rng = np.random.default_rng(742)
+    progression = [0, 3, 0, 4, 0, 4, 5, 3, 5, 3, 4, 0]
+    key = 60
+    for bar in range(bars):
+        root = key + MAJOR[progression[bar]]
+        start = bar * 4 * beat
+        chase = 4 <= bar <= 7
+        lonely = bar >= 8
+        for voice, note in enumerate([root - 12, root, root + 4, root + 7]):
+            add_note(mix, start, 3.65 * beat, note, .029 if lonely else .038, "reed", -.5 + voice * .32, .18, .48)
+        motif = JELLY_MOTIF if not lonely else [0, 2, 4, 2, 0, -3, -1, 0]
+        for step, interval in enumerate(motif):
+            when = start + step * .5 * beat
+            amplitude = .12 if chase else .078 if lonely else .095
+            add_note(mix, when, .48 * beat if chase else .74 * beat, key + interval, amplitude, "pluck" if chase else "bell", .18, .01, .16)
+        if chase:
+            for pulse in range(8):
+                when = start + pulse * .5 * beat
+                add_note(mix, when, .22 * beat, root - 24 + (7 if pulse % 2 else 0), .075, "triangle", -.22, .005, .04)
+                add_noise_hit(mix, when + .25 * beat, rng, True, .018)
+        else:
+            for pulse in [0.0, 2.0]:
+                add_note(mix, start + pulse * beat, 1.45 * beat, root - 24, .05, "triangle", -.18, .06, .3)
+    fade = int(.9 * SR)
+    mix[:fade] *= np.linspace(0, 1, fade)[:, None]
+    mix[-fade:] *= np.linspace(1, 0, fade)[:, None]
+    peak = max(1.0, np.max(np.abs(mix)) / .91)
+    return np.tanh(mix / peak * 1.18) * .8
+
+
 def write_wav(path: Path, signal: np.ndarray) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     pcm = np.int16(np.clip(signal, -1, 1) * 32767)
@@ -271,6 +335,14 @@ def main() -> None:
             write_wav(wav, compose_track(*spec))
             encode_ogg(wav, MUSIC_DIR / f"{level_id}.ogg", 4)
             print(f"music: {level_id}")
+        finale_wav = temp_dir / "finale-home.wav"
+        write_wav(finale_wav, compose_finale())
+        encode_ogg(finale_wav, MUSIC_DIR / "finale-home.ogg", 5)
+        print("music: finale-home")
+        intro_wav = temp_dir / "intro-central-park.wav"
+        write_wav(intro_wav, compose_intro())
+        encode_ogg(intro_wav, MUSIC_DIR / "intro-central-park.ogg", 5)
+        print("music: intro-central-park")
         for index in range(1, 4):
             wav = temp_dir / f"bark_{index}.wav"
             write_wav(wav, bark_variant(index))
@@ -284,4 +356,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
