@@ -27,6 +27,7 @@ var spawn_point := Vector2.ZERO
 var was_grounded := false
 var last_vertical_speed := 0.0
 var dust_timer := 0.0
+var move_hold_time := 0.0
 
 
 func _ready() -> void:
@@ -53,13 +54,16 @@ func _physics_process(delta: float) -> void:
 	coyote_left = COYOTE_TIME if is_on_floor() else maxf(0.0, coyote_left - delta)
 	last_vertical_speed = velocity.y
 	var axis := Input.get_axis("move_left", "move_right") if control_enabled else 0.0
-	var target_speed := (RUN_SPEED if Input.is_action_pressed("sprint") else WALK_SPEED) * axis
+	move_hold_time = move_hold_time + delta if absf(axis) > 0.8 else 0.0
+	var touch_run := DisplayServer.is_touchscreen_available() and move_hold_time > 0.48
+	var target_speed := (RUN_SPEED if Input.is_action_pressed("sprint") or touch_run else WALK_SPEED) * axis
 	var acceleration := GROUND_ACCEL if is_on_floor() else AIR_ACCEL
 	if absf(axis) > 0.01:
 		velocity.x = move_toward(velocity.x, target_speed, acceleration * delta)
 		facing = signf(axis)
 		idle_time = 0.0
 	else:
+		move_hold_time = 0.0
 		velocity.x = move_toward(velocity.x, 0.0, FRICTION * delta if is_on_floor() else AIR_ACCEL * 0.18 * delta)
 		if is_on_floor():
 			idle_time += delta
@@ -211,4 +215,3 @@ func _add_animation(frames: SpriteFrames, animation: StringName, texture: Textur
 		atlas.atlas = texture
 		atlas.region = Rect2((index % columns) * cell.x, (index / columns) * cell.y, cell.x, cell.y)
 		frames.add_frame(animation, atlas)
-

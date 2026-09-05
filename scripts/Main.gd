@@ -51,7 +51,7 @@ var hearts_label := Label.new()
 var location_label := Label.new()
 var collect_label := Label.new()
 var toast_label := Label.new()
-var touch_controls := Control.new()
+var touch_controls := JellyMobileControls.new()
 var toast_tween: Tween
 var intro_sequence: JellyIntroSequence
 var finale_sequence: JellyFinaleSequence
@@ -252,6 +252,7 @@ func load_level(index: int) -> void:
 	player.landed.connect(_on_player_landed)
 	_build_level_geometry()
 	_build_level_entities()
+	_build_dynamic_features()
 	var camera := Camera2D.new()
 	camera.position = Vector2(135, -22)
 	camera.position_smoothing_enabled = true
@@ -281,13 +282,13 @@ func _build_level_geometry() -> void:
 	var colors := _platform_colors(world_index)
 	for raw_rect in current_level.get("platforms", []):
 		var platform := JellyPlatform.new()
-		platform.configure(raw_rect, colors)
+		platform.configure(raw_rect, colors, "", world_index)
 		world_root.add_child(platform)
 	var moving_index := 0
 	for raw_moving in current_level.get("moving", []):
 		var moving := JellyPlatform.new()
 		var rect := [raw_moving[0], raw_moving[1], raw_moving[2], raw_moving[3]]
-		moving.configure(rect, [WORLD_COLORS[world_index][2], Color("#fff4c9"), Color.WHITE], MOVING_LABELS[world_index][level_index % 3])
+		moving.configure(rect, [WORLD_COLORS[world_index][2], Color("#fff4c9"), Color.WHITE], MOVING_LABELS[world_index][level_index % 3], world_index)
 		moving.configure_movement(str(raw_moving[4]), float(raw_moving[5]), float(raw_moving[6]) / 55.0, float(raw_moving[7]))
 		world_root.add_child(moving)
 		moving_index += 1
@@ -312,6 +313,7 @@ func _build_level_entities() -> void:
 		var y := 190.0 if kind == "dive" else _floor_y(x) - 31.0
 		enemy.configure(kind, int(current_level.get("world", 0)), Vector2(x, y), player)
 		enemy.player_hit.connect(_on_enemy_hit)
+		enemy.defeated.connect(_on_enemy_defeated)
 		world_root.add_child(enemy)
 	var paths: Array = current_level.get("squirrelPath", [])
 	if not paths.is_empty():
@@ -334,6 +336,34 @@ func _build_level_entities() -> void:
 	world_root.add_child(goal)
 
 
+func _build_dynamic_features() -> void:
+	var platforms: Array = current_level.get("platforms", [])
+	var world_index := int(current_level.get("world", 0))
+	for platform_index in [2, 6]:
+		if platform_index >= platforms.size(): continue
+		var rect: Array = platforms[platform_index]
+		if float(rect[2]) < 150.0: continue
+		var spring := JellySpringPad.new()
+		var spring_x := float(rect[0]) + float(rect[2]) * (0.72 if platform_index == 2 else 0.3)
+		spring.configure(Vector2(spring_x, float(rect[1]) - 2.0), WORLD_COLORS[world_index][2])
+		world_root.add_child(spring)
+	var extra_kind: String = ["patrol", "dash", "hop", "climb"][world_index]
+	for platform_index in [3, 8]:
+		if platform_index >= platforms.size(): continue
+		var rect: Array = platforms[platform_index]
+		if float(rect[2]) < 175.0: continue
+		var enemy_x := float(rect[0]) + float(rect[2]) * 0.56
+		var too_close := false
+		for raw_enemy in current_level.get("enemies", []):
+			if absf(float(raw_enemy[0]) - enemy_x) < 135.0: too_close = true
+		if too_close: continue
+		var extra_enemy := JellyEnemy.new()
+		extra_enemy.configure(extra_kind, world_index, Vector2(enemy_x, float(rect[1]) - 31.0), player, (platform_index + level_index) % 3)
+		extra_enemy.player_hit.connect(_on_enemy_hit)
+		extra_enemy.defeated.connect(_on_enemy_defeated)
+		world_root.add_child(extra_enemy)
+
+
 func _on_player_barked(origin: Vector2, direction: float) -> void:
 	bark_rings.append({"position": origin, "radius": 8.0, "life": 0.55, "direction": direction})
 	for enemy in get_tree().get_nodes_in_group("enemies"):
@@ -352,6 +382,11 @@ func _on_player_landed(hard: bool) -> void:
 func _on_enemy_hit(source_x: float) -> void:
 	if is_instance_valid(player):
 		player.take_damage(source_x)
+
+
+func _on_enemy_defeated(at: Vector2, color: Color) -> void:
+	_burst(at, color, 18, 210.0)
+	show_toast("Perfect pounce! Jelly bounced right over trouble.")
 
 
 func _damage_player(fell: bool) -> void:
@@ -571,6 +606,7 @@ func _platform_colors(world_index: int) -> Array[Color]:
 
 
 func _clear_world() -> void:
+	if is_instance_valid(touch_controls): touch_controls.release_all()
 	if is_instance_valid(world_root):
 		world_root.queue_free()
 	world_root = null
@@ -618,6 +654,7 @@ func _draw() -> void:
 	_draw_sky(world_index, width)
 	if not current_level.is_empty():
 		_draw_region_background(world_index, width, str(current_level.get("scene", "")))
+		_draw_level_life(world_index, width)
 		_draw_atmosphere(str(current_level.get("weather", "")), width)
 		_draw_props(current_level.get("props", []))
 		_draw_secrets(current_level.get("secrets", []), WORLD_COLORS[world_index][2])
@@ -664,6 +701,35 @@ func _draw_region_background(world_index: int, width: float, scene: String) -> v
 	for i in range(int(width / segment_width) + 2):
 		var tint := Color(1, 1, 1, 0.86 if i % 2 == 0 else 0.79)
 		draw_texture_rect(texture, Rect2(i * segment_width - 12.0, 0, segment_width + 24.0, 540), false, tint)
+
+
+func _draw_level_life(world_index: int, width: float) -> void:
+	# Small repeated motion beats keep long runs alive and quietly point forward.
+	for i in range(int(width / 430.0) + 2):
+		var base_x := i * 430.0 + 180.0
+		var bob := sin(elapsed * (1.8 + i % 3 * 0.25) + i) * 7.0
+		match world_index:
+			0:
+				var taxi_x := fposmod(base_x + elapsed * (24.0 + i % 2 * 10.0), width + 180.0) - 90.0
+				draw_rect(Rect2(taxi_x, 394 + bob, 46, 13), Color(1, 0.72, 0.12, 0.34))
+				draw_circle(Vector2(taxi_x + 10, 408 + bob), 4, Color(0.06, 0.08, 0.12, 0.5))
+				draw_circle(Vector2(taxi_x + 36, 408 + bob), 4, Color(0.06, 0.08, 0.12, 0.5))
+			1:
+				draw_arc(Vector2(base_x, 145 + bob), 13, PI * 1.05, PI * 1.92, 10, Color(1, 1, 1, 0.48), 2)
+				draw_arc(Vector2(base_x + 22, 145 + bob), 13, PI * 1.08, PI * 1.95, 10, Color(1, 1, 1, 0.48), 2)
+			2:
+				var firefly_x := base_x + sin(elapsed * 1.7 + i) * 34.0
+				draw_circle(Vector2(firefly_x, 215 + bob * 2), 6, Color(1, 0.85, 0.2, 0.12))
+				draw_circle(Vector2(firefly_x, 215 + bob * 2), 2, Color(1, 0.92, 0.35, 0.72))
+			3:
+				var butterfly := Vector2(base_x + sin(elapsed + i) * 28.0, 185 + bob * 2)
+				draw_circle(butterfly + Vector2(-4, 0), 4, Color(1, 0.45, 0.68, 0.45))
+				draw_circle(butterfly + Vector2(4, 0), 4, Color(1, 0.78, 0.32, 0.45))
+	# A subtle scent rhythm makes the intended direction legible without arrows.
+	for i in range(int(width / 260.0)):
+		var scent_x := i * 260.0 + 120.0
+		var scent_y := 335.0 + sin(i * 1.7) * 42.0 + sin(elapsed * 1.4 + i) * 8.0
+		draw_circle(Vector2(scent_x, scent_y), 3.0, Color(WORLD_COLORS[world_index][2], 0.24 + sin(elapsed * 2.0 + i) * 0.08))
 
 
 func _draw_landmarks(world_index: int, width: float, scene: String) -> void:
@@ -901,25 +967,7 @@ func _build_hud() -> void:
 
 
 func _build_touch_controls() -> void:
-	touch_controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	touch_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_layer.add_child(touch_controls)
-	var controls := [
-		["◀", "move_left", Vector2(28, 452), Vector2(70, 62)],
-		["▶", "move_right", Vector2(106, 452), Vector2(70, 62)],
-		["WOOF", "bark", Vector2(778, 462), Vector2(72, 50)],
-		["JUMP", "jump", Vector2(858, 442), Vector2(78, 72)],
-	]
-	for item in controls:
-		var button := Button.new()
-		button.text = item[0]
-		button.position = item[2]
-		button.size = item[3]
-		button.mouse_filter = Control.MOUSE_FILTER_STOP
-		button.modulate.a = 0.72
-		button.button_down.connect(func(action := str(item[1])): Input.action_press(action))
-		button.button_up.connect(func(action := str(item[1])): Input.action_release(action))
-		touch_controls.add_child(button)
 	touch_controls.hide()
 
 

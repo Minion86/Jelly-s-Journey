@@ -4,6 +4,7 @@ const root = new URL('../', import.meta.url);
 const required = [
   'project.godot', 'export_presets.cfg', 'scenes/main.tscn',
   'scripts/Main.gd', 'scripts/Player.gd', 'scripts/Enemy.gd',
+	'scripts/Platform.gd', 'scripts/SpringPad.gd', 'scripts/MobileControls.gd',
   'scripts/Squirrel.gd', 'scripts/AudioDirector.gd',
 	'scripts/IntroSequence.gd',
 	'scripts/FinaleSequence.gd',
@@ -15,6 +16,7 @@ const required = [
 	'assets/backgrounds/new-york-skyline-v1.webp', 'assets/backgrounds/new-york-street-v1.webp',
 	'assets/backgrounds/los-angeles-v1.webp', 'assets/backgrounds/louisiana-quarter-v1.webp',
 	'assets/backgrounds/orlando-v1.webp',
+	'assets/enemy-performances-v2.webp',
 ];
 await Promise.all(required.map(path => access(new URL(path, root))));
 
@@ -47,8 +49,21 @@ for (const feature of ['COYOTE_TIME', 'JUMP_BUFFER', 'idle_cycle', 'sleep', 'bar
   if (!player.includes(feature)) throw new Error(`Player controller is missing ${feature}`);
 }
 const enemy = await readFile(new URL('scripts/Enemy.gd', root), 'utf8');
-for (const state of ['ANTICIPATE', 'ATTACK', 'RECOVER', 'STUNNED']) {
+for (const state of ['IDLE', 'ANTICIPATE', 'ATTACK', 'RECOVER', 'STUNNED', 'DEFEATED', 'ground_probe', '_defeat']) {
   if (!enemy.includes(state)) throw new Error(`Enemy state machine is missing ${state}`);
+}
+
+const mobile = await readFile(new URL('scripts/MobileControls.gd', root), 'utf8');
+for (const feature of ['TouchScreenButton', 'passby_press', 'move_left', 'jump', 'release_all']) {
+	if (!mobile.includes(feature)) throw new Error(`Mobile controls are missing ${feature}`);
+}
+const platform = await readFile(new URL('scripts/Platform.gd', root), 'utf8');
+for (const feature of ['_draw_world_details', '_draw_moving_mechanism', 'world_index']) {
+	if (!platform.includes(feature)) throw new Error(`Dynamic platform rendering is missing ${feature}`);
+}
+const buildHelper = await readFile(new URL('tools/build-godot.mjs', root), 'utf8');
+for (const feature of ['touchmove', 'safe-area-inset', 'CACHED_FILES', 'index.pck']) {
+	if (!buildHelper.includes(feature)) throw new Error(`Mobile web packaging is missing ${feature}`);
 }
 
 const finale = await readFile(new URL('scripts/FinaleSequence.gd', root), 'utf8');
@@ -61,4 +76,4 @@ for (const beat of ['central-park-intro-v1.webp', '_transition_to', 'playful squ
 	if (!intro.includes(beat)) throw new Error(`Animated Central Park intro is missing ${beat}`);
 }
 
-console.log('Validated Godot project: 12 levels, animated Central Park prologue and family reunion, 14 original score cues, five regional backgrounds, and 11 effect cues.');
+console.log('Validated Godot project: 12 dense levels, animated enemy variants, reactive platforms and springs, mobile multi-touch controls, 14 score cues, and 11 effect cues.');

@@ -39,11 +39,14 @@ const packRelease = await splitReleaseFile('index.pck');
 
 const htmlPath = `${dist}index.html`;
 let html = await readFile(htmlPath, 'utf8');
+html = html.replace('</head>', `<style>html,body,#canvas{touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}body{padding:max(0px,env(safe-area-inset-top)) max(0px,env(safe-area-inset-right)) max(0px,env(safe-area-inset-bottom)) max(0px,env(safe-area-inset-left))}</style></head>`);
 const loaderTag = '\t\t<script src="index.js"></script>';
 if (!html.includes(loaderTag)) throw new Error('Could not find the Godot loader tag in index.html.');
 const fetchShim = `\t\t<script>\n` +
 `const JELLY_CHUNKED_FILES = ${JSON.stringify({ 'index.wasm': wasmRelease.parts, 'index.pck': packRelease.parts })};\n` +
 `const jellyNativeFetch = window.fetch.bind(window);\n` +
+`document.addEventListener('touchmove', (event) => event.preventDefault(), { passive: false });\n` +
+`document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });\n` +
 `window.fetch = async function (input, init) {\n` +
 `  const requestUrl = typeof input === 'string' ? input : input.url;\n` +
 `  const resolved = new URL(requestUrl, window.location.href);\n` +
@@ -70,6 +73,10 @@ let worker = await readFile(workerPath, 'utf8');
 worker = worker.replace(
   /const CACHE_PREFIX = '(.*)';/,
   (_, prefix) => `const CACHE_PREFIX = ${JSON.stringify(prefix)};`,
+);
+worker = worker.replace(
+	/const CACHED_FILES = .*;/,
+	`const CACHED_FILES = ${JSON.stringify(['index.html', 'index.js', 'index.offline.html', 'index.icon.png', 'index.apple-touch-icon.png', 'index.audio.worklet.js'])};`,
 );
 worker = worker.replace(
   /const CACHABLE_FILES = .*;/,

@@ -21,6 +21,8 @@ The `main` branch is exported automatically as a browser game through GitHub Pag
 
 The controller includes 130 ms coyote time, 150 ms jump buffering, variable jump height, separate ground/air acceleration, momentum preservation, landing squash, takeoff stretch, and camera look-ahead.
 
+On touch devices, large multi-touch controls support simultaneous movement and jumping, press-drag continuity, automatic run momentum, a dedicated pause control, safe-area spacing, and browser gesture/scroll suppression. The responsive 960×540 playfield is configured for future native landscape exports to iOS and Android.
+
 ## Story and levels
 
 - A six-shot animated Central Park prologue shows Jelly's joyful walk with her humans, the playful squirrel stealing her blue ribbon, the frantic chase, and the parade that separates the family. Camera drifts, crossfades, flying leaves, ribbon trails, timed sound effects, and an original score carry the scene directly into Chapter One.
@@ -48,6 +50,8 @@ Each enemy family uses the same readable five-state behavior model—patrol, ant
 - Orlando bandana lizards sprint and wall-leap.
 
 Jelly's bark stuns aggressive animals rather than hurting them. Squirrels use a separate taunt/chase/friend state machine and reward a golden acorn when caught.
+
+Enemies now come in three behavioral variants with different size, speed, awareness, patrol range, timing, color treatment, and attack energy. They idle, look around, respect ledges, telegraph attacks, skid or bounce through recovery, emit movement effects, and can be safely pounced on for a spring jump. Every platform is location-dressed with animated grass, windows, lights, vines, flowers, oranges, hardware, or route markings, while two spring pads per level create faster high routes.
 
 ## Original soundtrack and effects
 

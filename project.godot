@@ -23,6 +23,12 @@ window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
+window/stretch/aspect="expand"
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=true
+pointing/emulate_touch_from_mouse=false
 
 [rendering]
 
@@ -43,4 +49,3 @@ default_bus_layout="res://default_bus_layout.tres"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Trigger"
-
