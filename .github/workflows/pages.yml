@@ -41,7 +41,9 @@ jobs:
           test -s dist/index.wasm.part1
           test -s dist/index.wasm.part2
           test ! -e dist/index.wasm
-          test -s dist/index.pck
+          test -s dist/index.pck.part0
+          test -s dist/index.pck.part1
+          test ! -e dist/index.pck
       - name: Upload tested web build
         uses: actions/upload-artifact@v4
         with:
